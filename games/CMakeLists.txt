@@ -1,0 +1,4 @@
+# Compatibility
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
+
+ADD_SUBDIRECTORY("${PROJECT_SOURCE_DIR}/games/alpha" alpha)
