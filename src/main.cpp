@@ -16,10 +16,10 @@ int main(int argc, char *argv[]) {
 
     restrictions.set_restriction(restriction_memory_limit, 2048*1024);
     options.use_cmd = true;
-    secure_runner *test_runner = new secure_runner("test.exe", options, restrictions);
+    secure_runner *test_runner = new secure_runner("empty.exe", options, restrictions);
 
-    //output_stream_buffer_class *output_buffer = new output_stream_buffer_class(8192);
-    output_stdout_buffer_class *output_buffer = new output_stdout_buffer_class(4096);
+    output_stream_buffer_class *output_buffer = new output_stream_buffer_class(8192);
+    //output_stdout_buffer_class *output_buffer = new output_stdout_buffer_class(4096);
     test_runner->set_pipe(STD_OUTPUT_PIPE, new output_pipe_class(output_buffer));
 
     input_stream_buffer_class *input_buffer = new input_stream_buffer_class();
@@ -31,8 +31,22 @@ int main(int argc, char *argv[]) {
     input_buffer->set_ready();
 
     while (test_runner->is_running()) {
-        //while (!output_buffer->ready());
+        while (!output_buffer->ready())
+            Sleep(10);
+        int k = 0;
+        std::istringstream s(output_buffer->stock());
+        for (int i = 0; i < n; ++i) {
+            int p;
+            s >> p;
+            if (p == c[i])
+                k++;
+            cout << p << " ";
+        }
+        cout << endl << k << endl;
+        input_buffer->buffer << k << endl;
+        input_buffer->set_ready();
 
     }
+    return 0;
 
 }
