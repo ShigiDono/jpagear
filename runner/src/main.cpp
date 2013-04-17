@@ -60,7 +60,7 @@ public:
         return players[player_index];
     }
     void start() {
-        for (int i = 0; i < players.size(); ++i)
+        for (size_t i = 0; i < players.size(); ++i)
         {
             players[i]->runner->run_process_async();
             players[i]->input_buffer->buffer << n << endl;
@@ -70,7 +70,7 @@ public:
     }
     bool active() {
         int total = 0;
-        for (int i = 0; i < players.size(); ++i)
+        for (size_t i = 0; i < players.size(); ++i)
         {
             total += players[i]->is_active();
         }
