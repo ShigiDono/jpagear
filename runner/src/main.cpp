@@ -1,7 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <spawner.h>
 #include <Windows.h>
-
+#include <json/json.h>
 #include <vector>
 using namespace std;
 
@@ -65,6 +66,7 @@ public:
             players[i]->runner->run_process_async();
             players[i]->input_buffer->buffer << n << endl;
             players[i]->input_buffer->set_ready();
+            players[i]->runner->wait_for_init(infinite);
 
         }
     }
@@ -83,15 +85,45 @@ public:
 int main(int argc, char *argv[]) {
     int c[n];
     srand(time(NULL));
+    std::string game_name = "alpha";
     for (int i = 0; i < n; ++i) {
         c[i] = 1 + rand()%n;
+    }
+
+    Json::Value json_value;
+    Json::Reader json_reader;
+    char cwd[2048];
+    GetCurrentDirectory(2048, cwd);
+    if (!json_reader.parse(std::ifstream("../../runner/config/config.json"), json_value)) {
+        std::cout << "Failed to read config!" << endl;
+        return 0;
+    }
+
+    std::string result = json_value["games"][game_name]["config"].asString();
+    if (result == "") {
+        std::cout << "Unknown or unconfigured game \"" << game_name << "\"!" << endl;
+        return 0;
+    }
+    
+    Json::Value json_game;
+    if (!json_reader.parse(std::ifstream("../../runner/" + result), json_game)) {
+        std::cout << "Failed to load \"" << game_name << "\" game!" << endl;
+        return 0;
     }
 
     game_options_class game_options;
 
 
-    game_options.ai_restrictions.set_restriction(restriction_memory_limit, 20480*1024);
+    //game_options.ai_restrictions.set_restriction(restriction_memory_limit, 20480*1024);
     game_options.ai_options.use_cmd = true;
+
+    Json::Value json_game_restrictions = json_game["restrictions"]["default"];
+    for (Json::ValueIterator i = json_game_restrictions.begin(); i != json_game_restrictions.end(); ++i) {
+        std::string restriction = i.key().asString();
+        game_options.ai_restrictions.set_restriction(restriction, json_game_restrictions[restriction].asLargestUInt());
+    }
+
+
 
     game_class game(game_options);
 

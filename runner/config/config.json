@@ -1,0 +1,8 @@
+{
+	"games": {
+		// Guess number sequence game -- Test
+		"alpha": {
+			"config": "games/alpha/config.json"
+		}
+	}
+}

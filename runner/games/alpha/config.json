@@ -1,0 +1,18 @@
+{
+	"name": "alpha",
+	"long_name": "Alpha game",
+	"description": "Some kind of description",
+	"restrictions": {
+		"default": {
+			//default restriction set for ai's
+			"restriction_memory_limit": 20480000
+		}
+	},
+	"options": {
+		"default": {
+			//user and password for delegated launch
+			"user": "user_name",
+			"password": "123"
+		}
+	}
+}
