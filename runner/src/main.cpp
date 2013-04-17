@@ -124,25 +124,6 @@ int main(int argc, char *argv[]) {
 
     game.finish();
 
-    /*test_runner->run_process_async();
-
-    while (test_runner->is_running()) {
-        while (!output_buffer->ready())
-            Sleep(10);
-        int k = 0;
-        std::istringstream s(output_buffer->stock());
-        for (int i = 0; i < n; ++i) {
-            int p;
-            s >> p;
-            if (p == c[i])
-                k++;
-            cout << p << " ";
-        }
-        cout << endl << k << endl;
-        input_buffer->buffer << k << endl;
-        input_buffer->set_ready();
-
-    }*/
     return 0;
 
 }
